@@ -1,29 +1,33 @@
 <template>
-    <h1 v-if="!pokemon">Loading...</h1>
-    <div v-else>
-      <h1>¿Cuál es este Pokémon?</h1>
-      <PokemonPicture :pokemon-id="pokemon.id" :show-pokemon="showPokemon" />
-      <PokemonOptions
-        :pokemons="pokemonArr"
-        @selection="checkAnswer($event)"
-        :disabled="showAnswer"
-      />
-      <ul v-if="showAnswer" class="fade-in">
-        <h2>{{ message }}</h2>
-        <h3>Puntuación: {{ points }}</h3>
-        <template class="button-container">
-          <button class="continue-button" @click="continueGame" v-if="answeredCorrectly">Continuar</button>
-          <button @click="newGame">Nuevo Juego</button>
-        </template>
-      </ul>
+    <div>
+      <h1 v-if="!pokemon">Loading...</h1>
+      <div v-else>
+        <h1>¿Cuál es este Pokémon?</h1>
+        <PokemonPicture :pokemon-id="pokemon.id" :show-pokemon="showPokemon" />
+        <PokemonOptions
+          :pokemons="pokemonArr"
+          @selection="checkAnswer($event)"
+          :disabled="showAnswer"
+          :hard-mode="hardMode"
+        />
+        <ul v-if="showAnswer" class="fade-in">
+          <h2>{{ message }}</h2>
+          <h3>Puntuación: {{ points }}</h3>
+          <template class="button-container">
+            <button class="continue-button" @click="continueGame" v-if="answeredCorrectly">Continuar</button>
+            <button @click="newGame">Nuevo Juego</button>
+            <button @click="toggleHardMode">{{ hardMode ? "Desactivar" : "Activar" }} Hard Mode</button>
+          </template>
+        </ul>
+      </div>
     </div>
   </template>
   
   <script>
-  import PokemonOptions from '@/components/PokemonOptions.vue'
-  import PokemonPicture from '@/components/PokemonPicture.vue'
+  import PokemonOptions from "@/components/PokemonOptions.vue";
+  import PokemonPicture from "@/components/PokemonPicture.vue";
   
-  import getPokemonOptions from '@/helpers/getPokemonOptions'
+  import getPokemonOptions from "@/helpers/getPokemonOptions";
   
   export default {
     components: {
@@ -36,22 +40,23 @@
         pokemon: null,
         showPokemon: false,
         showAnswer: false,
-        message: '',
+        message: "",
         points: 0,
         answeredCorrectly: false,
-      }
+        hardMode: false,
+      };
     },
     methods: {
       async mixPokemonArray() {
-        this.pokemonArr = await getPokemonOptions()
+        this.pokemonArr = await getPokemonOptions();
   
-        const rndInt = Math.floor(Math.random() * 4)
-        this.pokemon = this.pokemonArr[rndInt]
+        const rndInt = Math.floor(Math.random() * 4);
+        this.pokemon = this.pokemonArr[rndInt];
         this.answeredCorrectly = false;
       },
       checkAnswer(pokemonId) {
-        this.showPokemon = true
-        this.showAnswer = true
+        this.showPokemon = true;
+        this.showAnswer = true;
         if (pokemonId === this.pokemon.id && !this.answeredCorrectly) {
           this.message = `¡Correcto, es ${this.pokemon.name}!`;
           this.points++;
@@ -61,20 +66,23 @@
         }
       },
       continueGame() {
-        this.showPokemon = false
-        this.showAnswer = false
-        this.pokemonArr = []
-        this.pokemon = null
-        this.mixPokemonArray()
+        this.showPokemon = false;
+        this.showAnswer = false;
+        this.pokemonArr = [];
+        this.pokemon = null;
+        this.mixPokemonArray();
       },
       newGame() {
-        location.reload()
+        location.reload();
+      },
+      toggleHardMode() {
+        this.hardMode = !this.hardMode; // Cambiar el estado del modo difícil
       },
     },
     mounted() {
-      this.mixPokemonArray()
+      this.mixPokemonArray();
     },
-  }
+  };
   </script>
   
   <style scoped>

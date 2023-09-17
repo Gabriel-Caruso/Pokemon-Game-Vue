@@ -1,4 +1,9 @@
-# 04-pokemon-game
+# Pokemon Game
+Webapp de un juego creado siguiendo el curso de Vue3 de Fernando Herrera.
+- Funcionalidades añadidas:
+- Dificultad
+- Puntuación
+- Continuar y guardar puntuación
 
 ## Project setup
 ```

@@ -7,7 +7,7 @@
         v-for="{ name, id } in pokemons"
         :key="id"
       >
-        {{ hardMode ? id : name }} <!-- Mostrar ID o nombre según el modo difícil -->
+        {{ hardMode ? id : name }} <!-- Mostrar ID o nombre según el modo de juego activo -->
       </li>
     </ul>
   </div>
